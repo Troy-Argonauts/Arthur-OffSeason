@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auton.routines.OneBall;
 import frc.robot.auton.routines.TwoBall;
 import frc.robot.subsystems.*;
+import frc.robot.vision.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
     private static Climber climber;
     private static PneumaticsSystem pneumaticsSystem;
     private static Indexer indexer;
+    private static Limelight limelight;
 
     private final SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -48,8 +50,11 @@ public class Robot extends TimedRobot {
         climber = new Climber();
         pneumaticsSystem = new PneumaticsSystem();
         indexer = new Indexer();
+        limelight = Limelight.getInstance();
 
         CameraServer.startAutomaticCapture();
+        limelight.setLedMode(Limelight.LightMode.ON);
+        limelight.setCameraMode(Limelight.CameraMode.VISION);
 
         robotContainer = new RobotContainer();
 
