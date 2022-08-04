@@ -2,6 +2,7 @@ package frc.libs.util;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.Constants;
 
 /**
@@ -96,5 +97,21 @@ public class ArgoController extends Joystick {
 
     public double getTriggers() {
         return getRightTrigger() - getLeftTrigger();
+    }
+
+    public Button getDpadUp() {
+        return new DPadButton(this, DPadButton.Direction.UP);
+    }
+
+    public Button getDpadDown() {
+        return new DPadButton(this, DPadButton.Direction.DOWN);
+    }
+
+    public Button getDpadLeft() {
+        return new DPadButton(this, DPadButton.Direction.LEFT);
+    }
+
+    public Button getDpadRight() {
+        return new DPadButton(this, DPadButton.Direction.RIGHT);
     }
 }
