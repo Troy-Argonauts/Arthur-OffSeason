@@ -50,7 +50,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Robot.getDriveTrain().setDefaultCommand(
                 new RunCommand(() ->  {
-                    Robot.getDriveTrain().cheesyDriveTeleop((driver.getRightJoystickX() * 0.5), driver.getLeftJoystickY(), 0.8);
+                    Robot.getDriveTrain().cheesyDriveTeleop((driver.getRightJoystickX() * 0.75), driver.getLeftJoystickY(), 0.4);
                          }, Robot.getDriveTrain())
          );
 
@@ -100,28 +100,26 @@ public class RobotContainer {
             new InstantCommand(() -> Robot.getIndexer().setState(Indexer.IndexerState.STOPPED), Robot.getIndexer())
         );
 
-        new DPadButton(operator, DPadButton.Direction.UP)
-                .whenActive(
-                        new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.UP))
-                ).whenInactive(
-                        new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.STOPPED))
-                );
+        operator.getDpadUp().whenActive(
+                new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.UP))
+        ).whenInactive(
+                new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.STOPPED))
+        );
 
-        new DPadButton(operator, DPadButton.Direction.DOWN)
-                .whenActive(
-                        new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.DOWN))
-                ).whenInactive(
-                        new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.STOPPED))
-                );
+        operator.getDpadDown().whenActive(
+                new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.DOWN))
+        ).whenInactive(
+                new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.STOPPED))
+        );
 
-        new DPadButton(operator, DPadButton.Direction.LEFT).whenPressed(
+        driver.getDpadLeft().whenPressed(
 //                        new InstantCommand(() -> Shooter.FRONT_SPEED -= 0.01)
 //                                .alongWith(new InstantCommand(() -> Shooter.BACK_SPEED -= 0.01))
                 new InstantCommand(() -> Shooter.PRESET_POSITION -= 1)
                         .andThen(new InstantCommand(() -> Robot.getShooter().setPreset()))
-                );
+        );
 
-        new DPadButton(operator, DPadButton.Direction.RIGHT).whenPressed(
+        driver.getDpadRight().whenPressed(
 //                new InstantCommand(() -> Shooter.FRONT_SPEED += 0.01)
 //                        .alongWith(new InstantCommand(() -> Shooter.BACK_SPEED += 0.01))
                 new InstantCommand(() -> Shooter.PRESET_POSITION += 1)
@@ -131,5 +129,8 @@ public class RobotContainer {
 
     public static ArgoController getDriver() {
         return driver;
+    }
+    public static ArgoController getOperator() {
+        return operator;
     }
 }

@@ -18,13 +18,13 @@ public class TwoBall extends SequentialCommandGroup {
 
                 new I_StopIntake(),
                 new WaitCommand(1),
-                new InstantCommand(() -> Robot.getDriveTrain().turnToAngle(180)),
+                new InstantCommand(() -> Robot.getDriveTrain().turnToAngle(140)),
 
                 new WaitCommand(1),
                 new DT_DriveStraight(110, 2, 0.25),
 
                 new InstantCommand(() -> Robot.getDriveTrain().cheesyDriveAuton(0,-1, 0.2)),
-                new WaitCommand(0.15),
+                new WaitCommand(0.2),
                 new InstantCommand(() -> Robot.getDriveTrain().cheesyDriveAuton(0,0, 0)),
 
                 new InstantCommand(() -> Robot.getShooter().resetPreset(1)),

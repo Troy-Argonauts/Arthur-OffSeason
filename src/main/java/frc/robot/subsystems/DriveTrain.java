@@ -161,13 +161,13 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void turnToAngle(double angle) {
-        double time = 2.28 * (angle / 360);
+        double time = 4.4 * (angle / 360);
 
         Timer timer = new Timer();
         timer.start();
 
         while (timer.get() < time) {
-            cheesyDriveAuton(1, 0, 0.25);
+            cheesyDriveAuton(1, 0, 0.2);
         }
 
         cheesyDriveAuton(0,0,1);

@@ -88,8 +88,8 @@ public class Shooter extends SubsystemBase {
 
     public void setPreset() {
         String[] presetArray = {"Fender Low", "Fender High", "Tarmac High"};
-        double[] presetFrontSpeeds = {0.2, 0.33, 0.4};
-        double[] presetBackSpeeds = {0.1, 0.33, 0.4};
+        double[] presetFrontSpeeds = {0.2, 0.33, 0.45};
+        double[] presetBackSpeeds = {0.1, 0.33, 0.45};
 
         if (PRESET_POSITION > (presetArray.length - 1)) {
             PRESET_POSITION = 0;
