@@ -73,6 +73,8 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("Driver Right Joystick X Value", RobotContainer.getDriver().getRightJoystickX());
         SmartDashboard.putNumber("Driver Left Joystick Y Value", RobotContainer.getDriver().getLeftJoystickY());
+
+        SmartDashboard.putNumber("Limelight Distance", limelight.getTy());
     }
 
     @Override

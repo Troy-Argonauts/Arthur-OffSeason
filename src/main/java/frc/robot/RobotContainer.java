@@ -50,7 +50,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Robot.getDriveTrain().setDefaultCommand(
                 new RunCommand(() ->  {
-                    Robot.getDriveTrain().cheesyDriveTeleop((driver.getRightJoystickX() * 0.5), driver.getLeftJoystickY(), 0.8);
+                    Robot.getDriveTrain().cheesyDriveTeleop((driver.getRightJoystickX() * 0.75), driver.getLeftJoystickY(), 0.4);
                          }, Robot.getDriveTrain())
          );
 
@@ -112,14 +112,14 @@ public class RobotContainer {
                 new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.STOPPED))
         );
 
-        operator.getDpadLeft().whenPressed(
+        driver.getDpadLeft().whenPressed(
 //                        new InstantCommand(() -> Shooter.FRONT_SPEED -= 0.01)
 //                                .alongWith(new InstantCommand(() -> Shooter.BACK_SPEED -= 0.01))
                 new InstantCommand(() -> Shooter.PRESET_POSITION -= 1)
                         .andThen(new InstantCommand(() -> Robot.getShooter().setPreset()))
         );
 
-        operator.getDpadRight().whenPressed(
+        driver.getDpadRight().whenPressed(
 //                new InstantCommand(() -> Shooter.FRONT_SPEED += 0.01)
 //                        .alongWith(new InstantCommand(() -> Shooter.BACK_SPEED += 0.01))
                 new InstantCommand(() -> Shooter.PRESET_POSITION += 1)
