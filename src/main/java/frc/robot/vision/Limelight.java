@@ -129,9 +129,8 @@ public class Limelight extends SubsystemBase {
         return table.getTable("limelight").getEntry(key);
     }
 
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("Limelight Distance", getDistanceFromTargetInches());
+    //TODO: tune constants (20 and 2)
+    public double getEstimatedShooterSpeed() {
+        return ((((getTy() + 20) * 2) + 33) / 100);
     }
-    
 }

@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.vision.Limelight;
 
 public class Shooter extends SubsystemBase {
 
@@ -105,5 +106,10 @@ public class Shooter extends SubsystemBase {
     public void resetPreset(int id) {
         PRESET_POSITION = id;
         setPreset();
+    }
+
+    public void setShooterSpeed(double speed) {
+        FRONT_SPEED = speed;
+        BACK_SPEED = speed;
     }
 }

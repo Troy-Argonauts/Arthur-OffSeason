@@ -12,21 +12,23 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.vision.Limelight;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootingSequence extends SequentialCommandGroup {
-  /** Creates a new ShooterLow. */
+    public double limeLightShooterSpeed = Limelight.getInstance().getEstimatedShooterSpeed();
     public ShootingSequence() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
         addCommands(
+            new InstantCommand(() -> Robot.getShooter().setShooterSpeed(limeLightShooterSpeed), Robot.getShooter()),
             new InstantCommand(() -> Robot.getShooter().setState(Shooter.ShooterState.SHOOT), Robot.getShooter()),
             new InstantCommand(() -> Robot.getIntake().setState(Intake.IntakeState.STOPPED), Robot.getIntake()),
             new InstantCommand(Robot.getPneumaticsSystem()::pickupIntake),
             new InstantCommand(() -> Robot.getIndexer().setState(Indexer.IndexerState.STOPPED), Robot.getIndexer()),
-            new WaitCommand(1),
+            new WaitCommand((3.5 * limeLightShooterSpeed)),
             new InstantCommand(() -> Robot.getIndexer().setState(Indexer.IndexerState.IN, Indexer.Motor.UP), Robot.getIndexer()),
             new WaitCommand(0.87),
             new InstantCommand(() -> Robot.getIndexer().setState(Indexer.IndexerState.IN, Indexer.Motor.FLOOR), Robot.getIndexer()),
