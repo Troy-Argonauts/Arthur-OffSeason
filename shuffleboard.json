@@ -61,8 +61,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Main High Speed",
-              "_title": "Main High Speed"
+              "_source0": "network_table:///SmartDashboard/Front Speed",
+              "_title": "Front Speed"
             }
           },
           "1,1": {
@@ -72,8 +72,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Slave High Speed",
-              "_title": "Slave High Speed"
+              "_source0": "network_table:///SmartDashboard/Rear Speed",
+              "_title": "Rear Speed"
             }
           },
           "4,1": {

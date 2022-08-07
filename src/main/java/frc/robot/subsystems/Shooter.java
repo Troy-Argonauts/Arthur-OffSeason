@@ -63,8 +63,8 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Shooter Activated", active);
-        SmartDashboard.putString("Main High Speed", (int) (Shooter.FRONT_SPEED * 100) + "%");
-        SmartDashboard.putString("Slave High Speed", (int) (Shooter.BACK_SPEED * 100) + "%");
+        SmartDashboard.putString("Front Speed", (int) (Shooter.FRONT_SPEED * 100) + "%");
+        SmartDashboard.putString("Rear Speed", (int) (Shooter.BACK_SPEED * 100) + "%");
     }
 
     public enum ShooterState {

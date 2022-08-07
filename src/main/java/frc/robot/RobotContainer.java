@@ -112,14 +112,14 @@ public class RobotContainer {
                 new InstantCommand(() -> Robot.getClimber().setState(Climber.ClimberState.STOPPED))
         );
 
-        driver.getDpadLeft().whenPressed(
+        operator.getDpadLeft().whenPressed(
 //                        new InstantCommand(() -> Shooter.FRONT_SPEED -= 0.01)
 //                                .alongWith(new InstantCommand(() -> Shooter.BACK_SPEED -= 0.01))
                 new InstantCommand(() -> Shooter.PRESET_POSITION -= 1)
                         .andThen(new InstantCommand(() -> Robot.getShooter().setPreset()))
         );
 
-        driver.getDpadRight().whenPressed(
+        operator.getDpadRight().whenPressed(
 //                new InstantCommand(() -> Shooter.FRONT_SPEED += 0.01)
 //                        .alongWith(new InstantCommand(() -> Shooter.BACK_SPEED += 0.01))
                 new InstantCommand(() -> Shooter.PRESET_POSITION += 1)
