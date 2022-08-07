@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.auton.commands.*;
 import frc.robot.commands.ShootingSequence;
+import frc.robot.vision.Limelight;
 
 public class TwoBall extends SequentialCommandGroup {
     public TwoBall() {
@@ -18,7 +19,7 @@ public class TwoBall extends SequentialCommandGroup {
 
                 new I_StopIntake(),
                 new WaitCommand(1),
-                new InstantCommand(() -> Robot.getDriveTrain().turnToAngle(140)),
+                new InstantCommand(() -> Robot.getDriveTrain().turnToAngle(180)),
 
                 new WaitCommand(1),
                 new DT_DriveStraight(110, 2, 0.25),
@@ -27,9 +28,10 @@ public class TwoBall extends SequentialCommandGroup {
                 new WaitCommand(0.2),
                 new InstantCommand(() -> Robot.getDriveTrain().cheesyDriveAuton(0,0, 0)),
 
+                new InstantCommand(() -> Robot.getLimelight().setStartTy(), Limelight.getInstance()),
                 new InstantCommand(() -> Robot.getShooter().resetPreset(1)),
                 new ShootingSequence()
         );
-        addRequirements(Robot.getDriveTrain(), Robot.getShooter(), Robot.getIntake(), Robot.getIndexer(), Robot.getPneumaticsSystem());
+        addRequirements(Robot.getDriveTrain(), Robot.getShooter(), Robot.getIntake(), Robot.getIndexer(), Robot.getPneumaticsSystem(), Robot.getLimelight());
     }
 }

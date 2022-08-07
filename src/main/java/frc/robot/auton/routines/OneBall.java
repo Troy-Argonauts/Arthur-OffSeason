@@ -4,21 +4,24 @@
 
 package frc.robot.auton.routines;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.auton.commands.DT_DriveStraight;
 import frc.robot.auton.commands.DT_ResetSensors;
 import frc.robot.auton.commands.S_ShooterLow;
+import frc.robot.vision.Limelight;
 
 public class OneBall extends SequentialCommandGroup {
 
     public OneBall() {
         addCommands(
                 new DT_ResetSensors(),
+                new InstantCommand(() -> Robot.getLimelight().setStartTy(), Limelight.getInstance()),
 
                 new S_ShooterLow(),
                 new DT_DriveStraight(-120, 2, 0.2)
         );
-        addRequirements(Robot.getDriveTrain(), Robot.getShooter(), Robot.getIntake(), Robot.getIndexer(), Robot.getPneumaticsSystem());
+        addRequirements(Robot.getDriveTrain(), Robot.getShooter(), Robot.getIntake(), Robot.getIndexer(), Robot.getPneumaticsSystem(), Robot.getLimelight());
     }
 }

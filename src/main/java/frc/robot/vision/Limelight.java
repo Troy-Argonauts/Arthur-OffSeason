@@ -6,9 +6,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import static java.lang.Math.abs;
+
 public class Limelight extends SubsystemBase {
 
     private NetworkTableInstance table = null;
+    public double startTy = 20;
 
     public enum LightMode {
         ON, OFF, BLINK
@@ -129,8 +132,12 @@ public class Limelight extends SubsystemBase {
         return table.getTable("limelight").getEntry(key);
     }
 
-    //TODO: tune constants (20 and 2)
+    //TODO: tune constants (2)
     public double getEstimatedShooterSpeed() {
-        return ((((getTy() + 20) * 2) + 33) / 100);
+        return ((((getTy() + startTy) * 2) + 33) / 100);
+    }
+
+    public void setStartTy() {
+        startTy = abs(getTy());
     }
 }
