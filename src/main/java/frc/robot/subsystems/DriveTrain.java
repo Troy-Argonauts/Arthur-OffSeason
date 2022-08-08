@@ -11,11 +11,12 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.util.LazyTalonFX;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
 
-    private final TalonFX frontLeft, frontRight, rearLeft, rearRight;
+    private final LazyTalonFX frontLeft, frontRight, rearLeft, rearRight;
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 
     /**
@@ -23,10 +24,10 @@ public class DriveTrain extends SubsystemBase {
      * Has rear motors follow front motors, and sets all motors to coast when stopped.
      */
     public DriveTrain() {
-        frontLeft = new TalonFX(Constants.DriveTrain.FRONT_LEFT);
-        frontRight = new TalonFX(Constants.DriveTrain.FRONT_RIGHT);
-        rearLeft = new TalonFX(Constants.DriveTrain.REAR_LEFT);
-        rearRight = new TalonFX(Constants.DriveTrain.REAR_RIGHT);
+        frontLeft = new LazyTalonFX(Constants.DriveTrain.FRONT_LEFT);
+        frontRight = new LazyTalonFX(Constants.DriveTrain.FRONT_RIGHT);
+        rearLeft = new LazyTalonFX(Constants.DriveTrain.REAR_LEFT);
+        rearRight = new LazyTalonFX(Constants.DriveTrain.REAR_RIGHT);
 
         frontLeft.setSensorPhase(false);
         frontRight.setSensorPhase(false);

@@ -6,12 +6,13 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.util.LazyTalonFX;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-    private final TalonFX shooterFront;
-    private final TalonFX shooterBack;
+    private final LazyTalonFX shooterFront;
+    private final LazyTalonFX shooterBack;
     private boolean active;
     public static double FRONT_SPEED, BACK_SPEED;
     public static int PRESET_POSITION;
@@ -22,8 +23,8 @@ public class Shooter extends SubsystemBase {
         FRONT_SPEED = Constants.Shooter.FRONT_DEFAULT_SPEED;
         BACK_SPEED = Constants.Shooter.BACK_DEFAULT_SPEED;
 
-        shooterFront = new TalonFX(Constants.Shooter.PORT);
-        shooterBack = new TalonFX(Constants.Shooter.SLAVE_PORT);
+        shooterFront = new LazyTalonFX(Constants.Shooter.PORT);
+        shooterBack = new LazyTalonFX(Constants.Shooter.SLAVE_PORT);
 
         shooterFront.configFactoryDefault();
         shooterBack.configFactoryDefault();

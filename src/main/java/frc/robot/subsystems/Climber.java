@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.util.LazyTalonFX;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
@@ -19,7 +20,7 @@ public class Climber extends SubsystemBase {
     }
 
     public Climber() {
-        mainMotor = new TalonFX(Constants.Climber.PORT);
+        mainMotor = new LazyTalonFX(Constants.Climber.PORT);
 
         mainMotor.setNeutralMode(NeutralMode.Brake);
 

@@ -3,11 +3,12 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.util.LazyCANSparkMax;
 import frc.robot.Constants;
 
 public class Indexer extends SubsystemBase {
 
-    private final CANSparkMax floorMotor, upMotor;
+    private final LazyCANSparkMax floorMotor, upMotor;
     private boolean floorActive, upActive;
 
     public enum IndexerState {
@@ -19,8 +20,8 @@ public class Indexer extends SubsystemBase {
     }
   
     public Indexer() {
-        floorMotor = new CANSparkMax(Constants.Indexer.FLOOR, CANSparkMax.MotorType.kBrushless);
-        upMotor = new CANSparkMax(Constants.Indexer.UP, CANSparkMax.MotorType.kBrushless);
+        floorMotor = new LazyCANSparkMax(Constants.Indexer.FLOOR, CANSparkMax.MotorType.kBrushless);
+        upMotor = new LazyCANSparkMax(Constants.Indexer.UP, CANSparkMax.MotorType.kBrushless);
 
         floorMotor.setInverted(true);
         upMotor.setInverted(true);
