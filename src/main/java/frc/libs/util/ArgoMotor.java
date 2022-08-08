@@ -9,8 +9,8 @@ import com.revrobotics.CANSparkMax;
 import frc.robot.Constants;
 
 public class ArgoMotor{
-    public WPI_TalonFX ArgoFalcon(int canID) {
-        WPI_TalonFX motor = new WPI_TalonFX(canID);
+    public static LazyTalonFX generateConfigFalcon(int canID) {
+        LazyTalonFX motor = new LazyTalonFX(canID);
 
         motor.configFactoryDefault();
         motor.setSensorPhase(false);
@@ -24,8 +24,8 @@ public class ArgoMotor{
         return motor;
     }
 
-    public WPI_TalonSRX ArgoCIM(int canID) {
-        WPI_TalonSRX motor = new WPI_TalonSRX(canID);
+    public static LazyTalonSRX generateConfigTalonSRX(int canID) {
+        LazyTalonSRX motor = new LazyTalonSRX(canID);
 
         motor.configFactoryDefault();
         motor.setSensorPhase(false);
@@ -38,8 +38,8 @@ public class ArgoMotor{
         return motor;
     }
 
-    public CANSparkMax ArgoNeo550(int canID) {
-        CANSparkMax motor = new CANSparkMax(canID, CANSparkMax.MotorType.kBrushless);
+    public static LazyCANSparkMax generateConfigNeo(int canID) {
+        LazyCANSparkMax motor = new LazyCANSparkMax(canID, CANSparkMax.MotorType.kBrushless);
 
         motor.setSmartCurrentLimit(14);
         motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
