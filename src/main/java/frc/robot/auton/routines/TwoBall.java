@@ -5,7 +5,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
-import frc.robot.auton.commands.*;
+import frc.robot.auton.commands.DT_DriveStraight;
+import frc.robot.auton.commands.DT_ResetSensors;
+import frc.robot.auton.commands.I_StartIntake;
+import frc.robot.auton.commands.I_StopIntake;
 import frc.robot.commands.ShootingSequence;
 
 public class TwoBall extends SequentialCommandGroup {
@@ -18,7 +21,7 @@ public class TwoBall extends SequentialCommandGroup {
 
                 new I_StopIntake(),
                 new WaitCommand(1),
-                new InstantCommand(() -> Robot.getDriveTrain().turnToAngle(140)),
+                new InstantCommand(() -> Robot.getDriveTrain().turnToAngle(137)),
 
                 new WaitCommand(1),
                 new DT_DriveStraight(110, 2, 0.25),

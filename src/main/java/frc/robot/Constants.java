@@ -37,7 +37,7 @@ public final class Constants {
         int FLOOR = 6;
         int UP = 7;
         double FLOOR_SPEED = 0.3;
-        double UP_SPEED = 0.95;
+        double UP_SPEED = 1;
     }
 
     public interface Pneumatics {
