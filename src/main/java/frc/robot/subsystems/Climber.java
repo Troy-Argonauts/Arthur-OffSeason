@@ -31,7 +31,6 @@ public class Climber extends SubsystemBase {
     }
 
     public void periodic() {
-        SmartDashboard.putBoolean("Climber Active", active);
     }
 
     public void setState(ClimberState state) {
