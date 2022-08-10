@@ -31,6 +31,8 @@ public class Indexer extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("Indexer Floor Active", floorActive);
+        SmartDashboard.putBoolean("Indexer Up Active", upActive);
     }
 
     public void setState(IndexerState indexerState, Motor motor) {

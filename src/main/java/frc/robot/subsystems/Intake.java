@@ -23,6 +23,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("Intake Active", active);
     }
 
     public void setState(IntakeState state) {
