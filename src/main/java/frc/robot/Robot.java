@@ -92,6 +92,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+
+        limelight.setLedMode(Limelight.LightMode.ON);
     }
 
     @Override
@@ -102,6 +104,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+
+        limelight.setLedMode(Limelight.LightMode.ON);
     }
 
     @Override

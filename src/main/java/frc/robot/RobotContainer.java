@@ -17,6 +17,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.vision.Limelight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -125,6 +126,10 @@ public class RobotContainer {
                 new InstantCommand(() -> Shooter.PRESET_POSITION += 1)
                         .andThen(new InstantCommand(() -> Robot.getShooter().setPreset()))
                 );
+
+        driver.getRBButton().toggleWhenPressed(
+                new InstantCommand(() -> Robot.getLimelight().setLedMode(Limelight.LightMode.OFF))
+        );
     }
 
     public static ArgoController getDriver() {
