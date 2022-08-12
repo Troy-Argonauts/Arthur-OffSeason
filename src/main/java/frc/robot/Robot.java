@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.auton.routines.OneBall;
-import frc.robot.auton.routines.TwoBall;
+import frc.robot.auton.routines.*;
+import frc.robot.commands.EmergencyStop;
 import frc.robot.subsystems.*;
 import frc.robot.vision.*;
 
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
         driveTrain.zeroEncoders();
         SmartDashboard.putData("Autonomous modes", chooser);
         chooser.setDefaultOption("One Ball", new OneBall().withTimeout(15));
-        chooser.addOption("Two Ball", new TwoBall());
+        chooser.addOption("Two Ball", new TwoBall().withTimeout(15));
         chooser.addOption("Do Nothing", new WaitCommand(15));
     }
 
@@ -106,6 +106,9 @@ public class Robot extends TimedRobot {
         }
 
         limelight.setLedMode(Limelight.LightMode.ON);
+
+        // TODO: Worse case, uncomment line 107
+         CommandScheduler.getInstance().cancelAll();
     }
 
     @Override
