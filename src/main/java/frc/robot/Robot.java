@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
         }
 
         // TODO: Worse case, uncomment line 107
-        // CommandScheduler.getInstance().cancelAll();
+         CommandScheduler.getInstance().cancelAll();
     }
 
     @Override
