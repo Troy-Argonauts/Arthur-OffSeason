@@ -31,7 +31,7 @@ public class ShootingSequence extends SequentialCommandGroup {
             new WaitCommand(1),
 //          new WaitCommand((3.5 * limeLightShooterSpeed)),
             new InstantCommand(() -> Robot.getIndexer().setState(Indexer.IndexerState.IN, Indexer.Motor.UP), Robot.getIndexer()),
-            new WaitCommand(0.87),
+//            new WaitCommand(0.87),
             new InstantCommand(() -> Robot.getIndexer().setState(Indexer.IndexerState.IN, Indexer.Motor.FLOOR), Robot.getIndexer()),
             new WaitCommand(2.5),
             new ParallelCommandGroup(

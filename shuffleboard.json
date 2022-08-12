@@ -288,19 +288,19 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Indexer Up Amps",
-              "_title": "Indexer Up Amps"
+              "_source0": "network_table:///limelight/ty",
+              "_title": "/limelight/ty"
             }
           },
           "1,4": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///limelight/ty",
-              "_title": "/limelight/ty"
+              "_source0": "network_table:///SmartDashboard/Estimated Shooter Speed",
+              "_title": "Estimated Shooter Speed"
             }
           }
         }

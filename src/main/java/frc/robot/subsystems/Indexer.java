@@ -26,7 +26,7 @@ public class Indexer extends SubsystemBase {
         upMotor.setInverted(true);
 
         floorMotor.setSmartCurrentLimit(14);
-        upMotor.setSmartCurrentLimit(14);
+        upMotor.setSmartCurrentLimit(20);
     }
 
     @Override
