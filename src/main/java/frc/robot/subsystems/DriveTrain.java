@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
@@ -25,10 +22,10 @@ public class DriveTrain extends SubsystemBase {
      * Has rear motors follow front motors, and sets all motors to coast when stopped.
      */
     public DriveTrain() {
-        frontLeft = ArgoMotor.generateConfigFalcon(Constants.DriveTrain.FRONT_LEFT);
-        frontRight = ArgoMotor.generateConfigFalcon(Constants.DriveTrain.FRONT_RIGHT);
-        rearLeft = ArgoMotor.generateConfigFalcon(Constants.DriveTrain.REAR_LEFT);
-        rearRight = ArgoMotor.generateConfigFalcon(Constants.DriveTrain.REAR_RIGHT);
+        frontLeft = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.FRONT_LEFT, Constants.DriveTrain.RAMP_SECONDS);
+        frontRight = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.FRONT_RIGHT, Constants.DriveTrain.RAMP_SECONDS);
+        rearLeft = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.REAR_LEFT, Constants.DriveTrain.RAMP_SECONDS);
+        rearRight = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.REAR_RIGHT, Constants.DriveTrain.RAMP_SECONDS);
 
         rearLeft.follow(frontLeft);
         rearRight.follow(frontRight);

@@ -6,12 +6,13 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.util.ArgoMotor;
+import frc.libs.util.LazyTalonFX;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-    private final TalonFX shooterFront;
-    private final TalonFX shooterBack;
+    private final LazyTalonFX shooterFront, shooterBack;
     private boolean active;
     public static double FRONT_SPEED, BACK_SPEED;
     public static int PRESET_POSITION;
@@ -22,18 +23,10 @@ public class Shooter extends SubsystemBase {
         FRONT_SPEED = Constants.Shooter.FRONT_DEFAULT_SPEED;
         BACK_SPEED = Constants.Shooter.BACK_DEFAULT_SPEED;
 
-        shooterFront = new TalonFX(Constants.Shooter.PORT);
-        shooterBack = new TalonFX(Constants.Shooter.SLAVE_PORT);
+        shooterFront = ArgoMotor.generateConfigTalonFX(Constants.Shooter.PORT, Constants.Shooter.RAMP_SECONDS);
+        shooterBack = ArgoMotor.generateConfigTalonFX(Constants.Shooter.SLAVE_PORT, Constants.Shooter.RAMP_SECONDS);
 
-        shooterFront.configFactoryDefault();
-        shooterBack.configFactoryDefault();
-
-        shooterFront.setNeutralMode(NeutralMode.Coast);
-        shooterBack.setNeutralMode(NeutralMode.Coast);
-
-        shooterFront.setSensorPhase(false);
         shooterFront.setInverted(true);
-        shooterBack.setSensorPhase(false);
         shooterBack.setInverted(false);
 
         StatorCurrentLimitConfiguration statorCurrentLimitConfiguration = new StatorCurrentLimitConfiguration();
@@ -53,11 +46,6 @@ public class Shooter extends SubsystemBase {
         shooterBack.config_kP(0, Constants.Shooter.kP);
         shooterBack.config_kI(0, Constants.Shooter.kI);
         shooterBack.config_kD(0, Constants.Shooter.kD);
-      
-        shooterFront.configClosedloopRamp(Constants.Shooter.RAMP_SECONDS);
-        shooterFront.configOpenloopRamp(Constants.Shooter.RAMP_SECONDS);
-        shooterBack.configClosedloopRamp(Constants.Shooter.RAMP_SECONDS);
-        shooterBack.configOpenloopRamp(Constants.Shooter.RAMP_SECONDS);
     }
 
     @Override

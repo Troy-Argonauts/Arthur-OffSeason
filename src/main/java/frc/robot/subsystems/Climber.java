@@ -7,11 +7,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.util.ArgoMotor;
+import frc.libs.util.LazyTalonFX;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
-    private final TalonFX mainMotor;
+    private final LazyTalonFX mainMotor;
     public static boolean active;
 
     public enum ClimberState {
@@ -19,15 +21,10 @@ public class Climber extends SubsystemBase {
     }
 
     public Climber() {
-        mainMotor = new TalonFX(Constants.Climber.PORT);
+        mainMotor = ArgoMotor.generateConfigTalonFX(Constants.Climber.PORT, 0);
 
         mainMotor.setNeutralMode(NeutralMode.Brake);
-
         mainMotor.setInverted(true);
-
-        mainMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
-        mainMotor.configFeedbackNotContinuous(false, 4);
-        mainMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
     }
 
     public void periodic() {
