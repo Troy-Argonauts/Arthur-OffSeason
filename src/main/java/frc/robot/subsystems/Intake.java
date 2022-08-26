@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.util.ArgoMotor;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
@@ -16,9 +17,8 @@ public class Intake extends SubsystemBase {
     }
 
     public Intake() {
-        intakeMotor = new CANSparkMax(Constants.Intake.PORT, CANSparkMax.MotorType.kBrushless);
+        intakeMotor = ArgoMotor.generateConfigSparkMax(Constants.Intake.PORT, 0);
         intakeMotor.setInverted(false);
-        intakeMotor.setIdleMode(IdleMode.kCoast);
     }
 
     @Override

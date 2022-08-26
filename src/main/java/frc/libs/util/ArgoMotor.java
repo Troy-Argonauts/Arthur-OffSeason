@@ -2,49 +2,47 @@ package frc.libs.util;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
-import frc.robot.Constants;
 
 public class ArgoMotor{
-    public WPI_TalonFX ArgoFalcon(int canID) {
-        WPI_TalonFX motor = new WPI_TalonFX(canID);
+    public static LazyTalonFX generateConfigTalonFX(int canID, double rampRate) {
+        LazyTalonFX motor = new LazyTalonFX(canID);
 
         motor.configFactoryDefault();
         motor.setSensorPhase(false);
         motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
         motor.configFeedbackNotContinuous(false, 4);
-        motor.configOpenloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        motor.configClosedloopRamp(Constants.DriveTrain.RAMP_SECONDS);
+        motor.configOpenloopRamp(rampRate);
+        motor.configClosedloopRamp(rampRate);
         motor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         motor.setNeutralMode(NeutralMode.Coast);
 
         return motor;
     }
 
-    public WPI_TalonSRX ArgoCIM(int canID) {
-        WPI_TalonSRX motor = new WPI_TalonSRX(canID);
+    public static LazyTalonSRX generateConfigTalonSRX(int canID, double rampRate) {
+        LazyTalonSRX motor = new LazyTalonSRX(canID);
 
         motor.configFactoryDefault();
         motor.setSensorPhase(false);
         motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
         motor.configFeedbackNotContinuous(false, 4);
-        motor.configOpenloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        motor.configClosedloopRamp(Constants.DriveTrain.RAMP_SECONDS);
+        motor.configOpenloopRamp(rampRate);
+        motor.configClosedloopRamp(rampRate);
         motor.setNeutralMode(NeutralMode.Coast);
 
         return motor;
     }
 
-    public CANSparkMax ArgoNeo550(int canID) {
-        CANSparkMax motor = new CANSparkMax(canID, CANSparkMax.MotorType.kBrushless);
+    public static LazyCANSparkMax generateConfigSparkMax(int canID, double rampRate) {
+        LazyCANSparkMax motor = new LazyCANSparkMax(canID, CANSparkMax.MotorType.kBrushless);
 
         motor.setSmartCurrentLimit(14);
         motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        motor.setClosedLoopRampRate(10);
-        motor.setOpenLoopRampRate(10);
+        motor.setClosedLoopRampRate(rampRate);
+        motor.setOpenLoopRampRate(rampRate);
 
         return motor;
     }
