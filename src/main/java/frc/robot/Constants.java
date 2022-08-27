@@ -74,4 +74,8 @@ public final class Constants {
         int OPERATOR_PORT = 1;
         double CONTROLLER_DRIFT = 0.05;
     }
+
+    public interface MISCELLANEOUS {
+        int PIGEON_PORT = 11;
+    }
 }

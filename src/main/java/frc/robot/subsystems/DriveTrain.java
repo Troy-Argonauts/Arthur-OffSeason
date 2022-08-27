@@ -3,8 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.SPI;
+import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,7 +14,7 @@ import frc.robot.Constants;
 public class DriveTrain extends SubsystemBase {
 
     private final LazyTalonFX frontLeft, frontRight, rearLeft, rearRight;
-    private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
+    private Pigeon2 gyro;
 
     /**
      * Sets the values of the frontLeft and frontRight motors, and creates local rear motors.
@@ -35,7 +34,7 @@ public class DriveTrain extends SubsystemBase {
         frontRight.setInverted(false);
         rearRight.setInverted(InvertType.FollowMaster);
 
-        gyro.calibrate();
+        gyro = new Pigeon2(Constants.MISCELLANEOUS.PIGEON_PORT);
     }
 
     /**
@@ -68,11 +67,11 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getAngle() {
-        return (gyro.getAngle() % 360);
+        return (gyro.getYaw() % 360);
     }
 
     public void zeroGyro() {
-        gyro.reset();
+
     }
 
     private void motorBreakMode(boolean enabled) {
@@ -91,7 +90,7 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
         SmartDashboard.putNumber("encoder", getEncoderPosition(false));
 
-        SmartDashboard.putNumber("Angle", gyro.getAngle());
+        SmartDashboard.putNumber("Angle", gyro.getYaw());
     }
 
     public void driveStraight(double inches, double speed) {
@@ -100,7 +99,7 @@ public class DriveTrain extends SubsystemBase {
             backwards = true;
         }
 
-        double turningValue = (0 - gyro.getAngle()) * Constants.DriveTrain.kP_TURN;
+        double turningValue = (0 - gyro.getYaw()) * Constants.DriveTrain.kP_TURN;
 
         double distance = inches * Constants.DriveTrain.NU_PER_INCH;
         SmartDashboard.putNumber("Distance", distance);
