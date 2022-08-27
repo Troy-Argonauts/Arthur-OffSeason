@@ -65,9 +65,11 @@ public class RobotContainer {
         operator.getAButton().whenActive(
             new InstantCommand(Robot.getPneumaticsSystem()::dropIntake)
                 .alongWith(new InstantCommand(() -> Robot.getIntake().setState(Intake.IntakeState.OUT), Robot.getIntake()))
+                    .alongWith(new InstantCommand(() -> Robot.getIndexer().setState(Indexer.IndexerState.OUT)))
         ).whenInactive(
             new InstantCommand(Robot.getPneumaticsSystem()::pickupIntake)
                 .alongWith(new InstantCommand(() -> Robot.getIntake().setState(Intake.IntakeState.STOPPED), Robot.getIntake()))
+                    .alongWith(new InstantCommand(() -> Robot.getIndexer().setState(Indexer.IndexerState.STOPPED)))
         );
 
         operator.getRBButton().toggleWhenPressed(

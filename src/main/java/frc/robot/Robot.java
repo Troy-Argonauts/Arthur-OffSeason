@@ -14,10 +14,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.libs.util.log;
 import frc.robot.auton.routines.*;
 import frc.robot.commands.EmergencyStop;
 import frc.robot.subsystems.*;
 import frc.robot.vision.*;
+
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -60,10 +65,16 @@ public class Robot extends TimedRobot {
 
         robotContainer = new RobotContainer();
 
+//        try {
+//            log.logCreation("yvalues");
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
         driveTrain.zeroEncoders();
         SmartDashboard.putData("Autonomous modes", chooser);
         chooser.setDefaultOption("One Ball", new OneBall().withTimeout(15));
-        chooser.addOption("Two Ball", new TwoBall().withTimeout(15));
+        //chooser.addOption("Two Ball", new TwoBall().withTimeout(15));
         chooser.addOption("Do Nothing", new WaitCommand(15));
     }
 
@@ -105,6 +116,8 @@ public class Robot extends TimedRobot {
 
         // TODO: Worse case, uncomment line 107
          CommandScheduler.getInstance().cancelAll();
+
+         CommandScheduler.getInstance().schedule(new EmergencyStop());
     }
 
     @Override

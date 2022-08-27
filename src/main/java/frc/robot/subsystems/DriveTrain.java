@@ -142,18 +142,28 @@ public class DriveTrain extends SubsystemBase {
         motorBreakMode(true);
 
             while (getEncoderPosition(backwards) > distance) {
+//                double previousEncoder = getEncoderPosition(backwards);
                 cheesyDriveAuton(turningValue, -1, speed);
                 SmartDashboard.putNumber("Right Encoders", frontRight.getSelectedSensorPosition());
                 SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
                 SmartDashboard.putNumber("encoder", getEncoderPosition(backwards));
+
+//                if (previousEncoder == getEncoderPosition(backwards)) {
+//                    cheesyDriveAuton(0, 0, 0);
+//                }
             }
             cheesyDriveAuton(0,0,1);
 
             while (getEncoderPosition(backwards) < distance) {
+//                double previousEncoder = getEncoderPosition(backwards);
                 cheesyDriveAuton(turningValue, 1, speed);
                 SmartDashboard.putNumber("Right Encoders", frontRight.getSelectedSensorPosition());
                 SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
                 SmartDashboard.putNumber("encoder", getEncoderPosition(backwards));
+
+//                if (previousEncoder == getEncoderPosition(backwards)) {
+//                    cheesyDriveAuton(0, 0, 0);
+//                }
             }
             cheesyDriveAuton(0,0,1);
 
@@ -167,7 +177,7 @@ public class DriveTrain extends SubsystemBase {
         timer.start();
 
         while (timer.get() < time) {
-            cheesyDriveAuton(1, 0, 0.2);
+            cheesyDriveAuton(1, 0, 0.15);
         }
 
         cheesyDriveAuton(0,0,1);
