@@ -86,10 +86,6 @@ public class DriveTrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Right Encoders", frontRight.getSelectedSensorPosition());
-        SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
-        SmartDashboard.putNumber("encoder", getEncoderPosition(false));
-
         SmartDashboard.putNumber("Angle", gyro.getYaw());
     }
 
@@ -102,24 +98,17 @@ public class DriveTrain extends SubsystemBase {
         double turningValue = (0 - gyro.getYaw()) * Constants.DriveTrain.kP_TURN;
 
         double distance = inches * Constants.DriveTrain.NU_PER_INCH;
-        SmartDashboard.putNumber("Distance", distance);
         turningValue = Math.copySign(turningValue, distance);
 
         motorBreakMode(true);
 
             while (getEncoderPosition(backwards) > distance) {
                 cheesyDriveAuton(turningValue, -1, speed);
-                SmartDashboard.putNumber("Right Encoders", frontRight.getSelectedSensorPosition());
-                SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
-                SmartDashboard.putNumber("encoder", getEncoderPosition(backwards));
             }
             cheesyDriveAuton(0,0,1);
 
             while (getEncoderPosition(backwards) < distance) {
                 cheesyDriveAuton(turningValue, 1, speed);
-                SmartDashboard.putNumber("Right Encoders", frontRight.getSelectedSensorPosition());
-                SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
-                SmartDashboard.putNumber("encoder", getEncoderPosition(backwards));
             }
             cheesyDriveAuton(0,0,1);
 
