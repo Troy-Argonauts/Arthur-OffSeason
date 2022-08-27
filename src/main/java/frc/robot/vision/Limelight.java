@@ -5,13 +5,29 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Main;
+
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Time;
+import java.time.Instant;
+import java.util.Date;
 
 import static java.lang.Math.abs;
 
 public class Limelight extends SubsystemBase {
 
     private NetworkTableInstance table = null;
+<<<<<<< Updated upstream
     public double startTy = 20;
+=======
+<<<<<<< Updated upstream
+=======
+    public double startTy = 8;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
     public enum LightMode {
         ON, OFF, BLINK
@@ -132,6 +148,7 @@ public class Limelight extends SubsystemBase {
         return table.getTable("limelight").getEntry(key);
     }
 
+<<<<<<< Updated upstream
     //TODO: tune constants (2)
     public double getEstimatedShooterSpeed() {
         return ((((getTy() + startTy) * 2) + 33) / 100);
@@ -140,4 +157,36 @@ public class Limelight extends SubsystemBase {
     public void setStartTy() {
         startTy = abs(getTy());
     }
+=======
+<<<<<<< Updated upstream
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Limelight Distance", getDistanceFromTargetInches());
+    }
+    
+=======
+    //TODO: tune constants (2)
+    public double getEstimatedShooterSpeed() {
+//        return ((((getTy() - startTy) * 2) + 33) / 100);
+        return (getTy() + 20.5);
+    }
+
+    public void setStartTy() {
+        startTy = abs(getTy());
+    }
+
+    public void recordValues() {
+        try {
+            File output = new File("C:\\Users\\chira\\Documents\\GitHub\\Arthur-OffSeason/yvalues.txt");
+            if(!output.exists()) {
+                output.createNewFile();
+            }
+            Files.writeString(Path.of(output.getAbsolutePath()), "Limelight Y Values: " + getEstimatedShooterSpeed() + ", Time: " + Time.from(Instant.now()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 }
