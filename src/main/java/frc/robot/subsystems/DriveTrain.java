@@ -71,7 +71,7 @@ public class DriveTrain extends SubsystemBase {
         return (gyro.getAngle() % 360);
     }
 
-    public void zeroGyro() {
+    public void resetGyro() {
         gyro.reset();
     }
 
@@ -149,5 +149,19 @@ public class DriveTrain extends SubsystemBase {
 
         cheesyDriveAuton(0,0,1);
         timer.stop();
+    }
+
+    public void distancePID(double inches) {
+        double prevError = 0;
+        double period = 0.01;
+        double output = 0;
+        double totalError = 0;
+
+        double error = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (getEncoderPosition(false) / 8.6);
+        totalError += error * period;
+        output = (Constants.DriveTrain.kP * error + Constants.DriveTrain.kI * totalError + Constants.DriveTrain.kD * (error - prevError)) / period;
+        prevError = error;
+
+        cheesyDriveAuton(0, output, 0.8);
     }
 }
