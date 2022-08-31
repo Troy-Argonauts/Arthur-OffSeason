@@ -87,11 +87,7 @@ public class DriveTrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Right Encoders", frontRight.getSelectedSensorPosition());
-        SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
-        SmartDashboard.putNumber("encoder", getEncoderPosition(false));
-
-        SmartDashboard.putNumber("Angle", gyro.getAngle());
+        SmartDashboard.putNumber("Encoder", (getEncoderPosition(false) / 8.56));
     }
 
     public void driveStraight(double inches, double speed) {
@@ -159,9 +155,11 @@ public class DriveTrain extends SubsystemBase {
 
         double error = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (getEncoderPosition(false) / 8.6);
         totalError += error * period;
-        output = (Constants.DriveTrain.kP * error + Constants.DriveTrain.kI * totalError + Constants.DriveTrain.kD * (error - prevError)) / period;
+        output = (Constants.DriveTrain.kP * error + Constants.DriveTrain.kI * totalError + Constants.DriveTrain.kD * (error - prevError)) * period;
         prevError = error;
 
+        SmartDashboard.putNumber("Motor Output", output);
+        SmartDashboard.putNumber("Error", error);
         cheesyDriveAuton(0, output, 0.8);
     }
 }

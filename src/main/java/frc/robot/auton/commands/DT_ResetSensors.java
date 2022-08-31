@@ -9,7 +9,7 @@ public class DT_ResetSensors extends ParallelCommandGroup {
 	public DT_ResetSensors() {
 		addCommands(
 				new InstantCommand(Robot.getDriveTrain()::zeroEncoders),
-				new InstantCommand(Robot.getDriveTrain()::zeroGyro)
+				new InstantCommand(Robot.getDriveTrain()::resetGyro)
 		);
 		addRequirements(Robot.getDriveTrain());
 	}

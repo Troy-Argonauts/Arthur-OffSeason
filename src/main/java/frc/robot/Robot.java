@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
         chooser.setDefaultOption("One Ball", new OneBall().withTimeout(15));
         //chooser.addOption("Two Ball", new TwoBall().withTimeout(15));
         chooser.addOption("Do Nothing", new WaitCommand(15));
+        chooser.addOption("PID", new PID());
     }
 
     @Override
