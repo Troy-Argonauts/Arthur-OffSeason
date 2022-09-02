@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -49,8 +50,8 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void cheesyDriveTeleop(double turn, double speed, double nerf) {
-        frontLeft.set(ControlMode.PercentOutput, (speed - turn * 0.8) * nerf);
-        frontRight.set(ControlMode.PercentOutput, (speed + turn * 0.8) * nerf);
+        frontLeft.set(ControlMode.PercentOutput, (speed - turn) * nerf);
+        frontRight.set(ControlMode.PercentOutput, (speed + turn) * nerf);
     }
 
     public double getEncoderPosition(boolean backwards) {
@@ -148,18 +149,27 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void distancePID(double inches) {
-        double prevError = 0;
+        double prevrightError = 0;
+        double prevleftError = 0;
         double period = 0.01;
-        double output = 0;
-        double totalError = 0;
+        double rightOutput, leftOutput = 0;
+        double totalrightError = 0;
+        double totalleftError = 0;
 
-        double error = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (getEncoderPosition(false) / 8.6);
-        totalError += error * period;
-        output = (Constants.DriveTrain.kP * error + Constants.DriveTrain.kI * totalError + Constants.DriveTrain.kD * (error - prevError)) * period;
-        prevError = error;
+        double rightError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) + (frontRight.getSelectedSensorPosition() / 8.6);
+        totalrightError += rightError * period;
+        rightOutput = (Constants.DriveTrain.kP * rightError + Constants.DriveTrain.kI * totalrightError + Constants.DriveTrain.kD * (rightError - prevrightError)) * period;
+        prevrightError = rightError;
 
-        SmartDashboard.putNumber("Motor Output", output);
-        SmartDashboard.putNumber("Error", error);
-        cheesyDriveAuton(0, output, 0.8);
+        double leftError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) + (frontLeft.getSelectedSensorPosition() / 8.6);
+        totalleftError += leftError * period;
+        leftOutput = (Constants.DriveTrain.kP * leftError + Constants.DriveTrain.kI * totalleftError + Constants.DriveTrain.kD * (leftError - prevleftError)) * period;
+        prevleftError = leftError;
+
+//        DriverStation.reportError("Right Encoder: " + frontRight.getSelectedSensorPosition(), false);
+//        DriverStation.reportError("Left Encoder: " + frontLeft.getSelectedSensorPosition(), false);
+        DriverStation.reportError("Angle: " + getAngle(), false);
+        frontRight.set(ControlMode.PercentOutput, -rightOutput);
+        frontLeft.set(ControlMode.PercentOutput, -leftOutput);
     }
 }
