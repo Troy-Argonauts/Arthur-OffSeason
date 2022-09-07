@@ -1,21 +1,22 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.util.ArgoMotor;
+import frc.libs.util.LazyTalonFX;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
 
-    private final TalonFX frontLeft, frontRight, rearLeft, rearRight;
+    private final LazyTalonFX frontLeft, frontRight, rearLeft, rearRight;
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 
     /**
@@ -23,50 +24,18 @@ public class DriveTrain extends SubsystemBase {
      * Has rear motors follow front motors, and sets all motors to coast when stopped.
      */
     public DriveTrain() {
-        frontLeft = new TalonFX(Constants.DriveTrain.FRONT_LEFT);
-        frontRight = new TalonFX(Constants.DriveTrain.FRONT_RIGHT);
-        rearLeft = new TalonFX(Constants.DriveTrain.REAR_LEFT);
-        rearRight = new TalonFX(Constants.DriveTrain.REAR_RIGHT);
-
-        frontLeft.setSensorPhase(false);
-        frontRight.setSensorPhase(false);
-        rearLeft.setSensorPhase(false);
-        rearRight.setSensorPhase(false);
-
-        frontLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
-        frontRight.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
-        rearLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
-        rearRight.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
-
-        frontRight.configFeedbackNotContinuous(false, 4);
-        frontLeft.configFeedbackNotContinuous(false, 4);
-        rearLeft.configFeedbackNotContinuous(false, 4);
-        rearRight.configFeedbackNotContinuous(false, 4);
-
-        frontRight.configOpenloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        frontLeft.configOpenloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        rearRight.configOpenloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        rearLeft.configOpenloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        frontRight.configClosedloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        frontLeft.configClosedloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        rearRight.configClosedloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-        rearLeft.configClosedloopRamp(Constants.DriveTrain.RAMP_SECONDS);
-
-        frontRight.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-        frontLeft.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+        frontLeft = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.FRONT_LEFT, Constants.DriveTrain.RAMP_SECONDS);
+        frontRight = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.FRONT_RIGHT, Constants.DriveTrain.RAMP_SECONDS);
+        rearLeft = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.REAR_LEFT, Constants.DriveTrain.RAMP_SECONDS);
+        rearRight = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.REAR_RIGHT, Constants.DriveTrain.RAMP_SECONDS);
 
         rearLeft.follow(frontLeft);
         rearRight.follow(frontRight);
 
-        frontLeft.setInverted(true);
+        frontLeft.setInverted(false);
         rearLeft.setInverted(InvertType.FollowMaster);
-        frontRight.setInverted(false);
+        frontRight.setInverted(true);
         rearRight.setInverted(InvertType.FollowMaster);
-
-        frontLeft.setNeutralMode(NeutralMode.Coast);
-        frontRight.setNeutralMode(NeutralMode.Coast);
-        rearLeft.setNeutralMode(NeutralMode.Coast);
-        rearRight.setNeutralMode(NeutralMode.Coast);
 
         gyro.calibrate();
     }
@@ -77,20 +46,26 @@ public class DriveTrain extends SubsystemBase {
      * @param speed Speed of robot
      */
     public void cheesyDriveAuton(double turn, double speed, double nerf) {
+        frontLeft.set(ControlMode.PercentOutput, (speed - turn) * nerf);
+        frontRight.set(ControlMode.PercentOutput, (speed + turn) * nerf);
+    }
+
+    public void cheesyDriveTeleop(double turn, double speed, double nerf) {
         frontLeft.set(ControlMode.PercentOutput, -(speed - turn) * nerf);
         frontRight.set(ControlMode.PercentOutput, -(speed + turn) * nerf);
     }
 
-    public void cheesyDriveTeleop(double turn, double speed, double nerf) {
-        frontLeft.set(ControlMode.PercentOutput, (speed - turn * 0.8) * nerf);
-        frontRight.set(ControlMode.PercentOutput, (speed + turn * 0.8) * nerf);
-    }
-
     public double getEncoderPosition(boolean backwards) {
         if (backwards) {
-            return -(Math.abs(frontRight.getSelectedSensorPosition()) + Math.abs(frontLeft.getSelectedSensorPosition())) / 2;
+            return -(frontRight.getSelectedSensorPosition() + frontLeft.getSelectedSensorPosition()) / 2;
         }
-        return (Math.abs(frontRight.getSelectedSensorPosition()) + Math.abs(frontLeft.getSelectedSensorPosition())) / 2;
+        return (frontRight.getSelectedSensorPosition() + frontLeft.getSelectedSensorPosition()) / 2;
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Left Encoder", frontLeft.getSelectedSensorPosition() / 8.6);
+        SmartDashboard.putNumber("Right Encoder", frontRight.getSelectedSensorPosition() / 8.6);
     }
 
     public void zeroEncoders() {
@@ -104,7 +79,7 @@ public class DriveTrain extends SubsystemBase {
         return (gyro.getAngle() % 360);
     }
 
-    public void zeroGyro() {
+    public void resetGyro() {
         gyro.reset();
     }
 
@@ -118,9 +93,6 @@ public class DriveTrain extends SubsystemBase {
         }
     }
 
-    @Override
-    public void periodic() {
-    }
 
     public void driveStraight(double inches, double speed) {
         boolean backwards = false;
@@ -131,19 +103,36 @@ public class DriveTrain extends SubsystemBase {
         double turningValue = (0 - gyro.getAngle()) * Constants.DriveTrain.kP_TURN;
 
         double distance = inches * Constants.DriveTrain.NU_PER_INCH;
+        SmartDashboard.putNumber("Distance", distance);
         turningValue = Math.copySign(turningValue, distance);
 
         motorBreakMode(true);
 
-            while (getEncoderPosition(backwards) > distance) {
-                cheesyDriveAuton(turningValue, -1, speed);
-            }
-            cheesyDriveAuton(0,0,1);
+        while (getEncoderPosition(backwards) > distance) {
+//                double previousEncoder = getEncoderPosition(backwards);
+            cheesyDriveAuton(turningValue, -1, speed);
+            SmartDashboard.putNumber("Right Encoders", frontRight.getSelectedSensorPosition());
+            SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
+            SmartDashboard.putNumber("encoder", getEncoderPosition(backwards));
 
-            while (getEncoderPosition(backwards) < distance) {
-                cheesyDriveAuton(turningValue, 1, speed);
-            }
-            cheesyDriveAuton(0,0,1);
+//                if (previousEncoder == getEncoderPosition(backwards)) {
+//                    cheesyDriveAuton(0, 0, 0);
+//                }
+        }
+        cheesyDriveAuton(0,0,1);
+
+        while (getEncoderPosition(backwards) < distance) {
+//                double previousEncoder = getEncoderPosition(backwards);
+            cheesyDriveAuton(turningValue, 1, speed);
+            SmartDashboard.putNumber("Right Encoders", frontRight.getSelectedSensorPosition());
+            SmartDashboard.putNumber("Left Encoders", frontLeft.getSelectedSensorPosition());
+            SmartDashboard.putNumber("encoder", getEncoderPosition(backwards));
+
+//                if (previousEncoder == getEncoderPosition(backwards)) {
+//                    cheesyDriveAuton(0, 0, 0);
+//                }
+        }
+        cheesyDriveAuton(0,0,1);
 
         motorBreakMode(false);
     }
@@ -155,10 +144,55 @@ public class DriveTrain extends SubsystemBase {
         timer.start();
 
         while (timer.get() < time) {
-            cheesyDriveAuton(1, 0, 0.2);
+            cheesyDriveAuton(1, 0, 0.15);
         }
 
         cheesyDriveAuton(0,0,1);
         timer.stop();
+    }
+    public double rightEncoder() {
+        return frontRight.getSelectedSensorPosition();
+    }
+
+    public double leftEncoder() {
+        return frontLeft.getSelectedSensorPosition();
+    }
+    public void distancePID(double inches) {
+        SmartDashboard.putBoolean("I got here Left", false);
+        SmartDashboard.putBoolean("I got here Right", false);
+        double prevrightError = 0;
+        double prevleftError = 0;
+        double period = 0.01;
+        double rightOutput, leftOutput = 0;
+        double totalrightError = 0;
+        double totalleftError = 0;
+
+        double rightError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (rightEncoder() / 8.6);
+        totalrightError += rightError * period;
+        rightOutput = (Constants.DriveTrain.kP * rightError + Constants.DriveTrain.kI * totalrightError + Constants.DriveTrain.kD * (rightError - prevrightError)) * period;
+        prevrightError = rightError;
+
+        double leftError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (leftEncoder() / 8.6);
+        totalleftError += leftError * period;
+        leftOutput = (Constants.DriveTrain.kP * leftError + Constants.DriveTrain.kI * totalleftError + Constants.DriveTrain.kD * (leftError - prevleftError)) * period;
+        prevleftError = leftError;
+
+        if (leftError > 250 && leftOutput < 0.06) {
+            leftOutput += 0.01;
+            SmartDashboard.putBoolean("I got here Left", true);
+        }
+
+        if (rightError > 250 && rightOutput < 0.06) {
+            rightOutput += 0.01;
+            SmartDashboard.putBoolean("I got here Right", true);
+        }
+
+        SmartDashboard.putNumber("Left Error", leftError);
+        SmartDashboard.putNumber("Right Error", rightError);
+        SmartDashboard.putNumber("Right Output", rightOutput);
+        SmartDashboard.putNumber("Left Output", leftOutput);
+
+        frontRight.set(ControlMode.PercentOutput, rightOutput);
+        frontLeft.set(ControlMode.PercentOutput, leftOutput);
     }
 }

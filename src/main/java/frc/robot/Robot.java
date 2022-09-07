@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
         limelight = Limelight.getInstance();
 
         CameraServer.startAutomaticCapture();
-        limelight.setLedMode(Limelight.LightMode.ON);
+        limelight.setLedMode(Limelight.LightMode.OFF);
         limelight.setCameraMode(Limelight.CameraMode.VISION);
 
         robotContainer = new RobotContainer();
