@@ -64,8 +64,8 @@ public class DriveTrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Left Encoder", frontLeft.getSelectedSensorPosition() / 8.6);
-        SmartDashboard.putNumber("Right Encoder", frontRight.getSelectedSensorPosition() / 8.6);
+        SmartDashboard.putNumber("Left Encoder", frontLeft.getSelectedSensorPosition() / Constants.DriveTrain.ENCODER_GEARBOX_SCALE);
+        SmartDashboard.putNumber("Right Encoder", frontRight.getSelectedSensorPosition() / Constants.DriveTrain.ENCODER_GEARBOX_SCALE);
     }
 
     public void zeroEncoders() {
@@ -167,25 +167,25 @@ public class DriveTrain extends SubsystemBase {
         double totalrightError = 0;
         double totalleftError = 0;
 
-        double rightError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (rightEncoder() / 8.6);
+        double rightError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (rightEncoder() / Constants.DriveTrain.ENCODER_GEARBOX_SCALE);
         totalrightError += rightError * period;
         rightOutput = (Constants.DriveTrain.kP * rightError + Constants.DriveTrain.kI * totalrightError + Constants.DriveTrain.kD * (rightError - prevrightError)) * period;
         prevrightError = rightError;
 
-        double leftError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (leftEncoder() / 8.6);
+        double leftError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (leftEncoder() / Constants.DriveTrain.ENCODER_GEARBOX_SCALE);
         totalleftError += leftError * period;
         leftOutput = (Constants.DriveTrain.kP * leftError + Constants.DriveTrain.kI * totalleftError + Constants.DriveTrain.kD * (leftError - prevleftError)) * period;
         prevleftError = leftError;
 
-        if (leftError > 250 && leftOutput < 0.06) {
-            leftOutput += 0.01;
-            SmartDashboard.putBoolean("I got here Left", true);
-        }
-
-        if (rightError > 250 && rightOutput < 0.06) {
-            rightOutput += 0.01;
-            SmartDashboard.putBoolean("I got here Right", true);
-        }
+//        if (leftError > 250 && leftOutput < 0.06) {
+//            leftOutput += 0.01;
+//            SmartDashboard.putBoolean("I got here Left", true);
+//        }
+//
+//        if (rightError > 250 && rightOutput < 0.06) {
+//            rightOutput += 0.01;
+//            SmartDashboard.putBoolean("I got here Right", true);
+//        }
 
         SmartDashboard.putNumber("Left Error", leftError);
         SmartDashboard.putNumber("Right Error", rightError);
@@ -195,4 +195,16 @@ public class DriveTrain extends SubsystemBase {
         frontRight.set(ControlMode.PercentOutput, rightOutput);
         frontLeft.set(ControlMode.PercentOutput, leftOutput);
     }
+
+//    public void turnPID(double angle) {
+//        double prevError = 0;
+//        double period = 0.01;
+//        double output = 0;
+//        double totalError = 0;
+//
+//        double turnError = (angle - (getAngle());
+//        totalrightError += rightError * period;
+//        rightOutput = (Constants.DriveTrain.kP * rightError + Constants.DriveTrain.kI * totalrightError + Constants.DriveTrain.kD * (rightError - prevrightError)) * period;
+//        prevrightError = turnError;
+//    }
 }

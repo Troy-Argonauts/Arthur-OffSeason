@@ -17,7 +17,7 @@ public final class Constants {
         double WHEEL_REVOLUTION_DISTANCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI;
         double DISTANCE_CONVERSION = ENCODER_NU_PER_WHEEL_REVOLUTION / WHEEL_REVOLUTION_DISTANCE_INCHES;
         double NU_PER_INCH = ENCODER_NU_PER_WHEEL_REVOLUTION / WHEEL_REVOLUTION_DISTANCE_INCHES; //TODO: DELETE
-        double kP = 0.007;
+        double kP = 0.0078;
         double kI = 0.032;
         double kD = 0.0036;
         double kP_TURN = 0.1;
@@ -26,6 +26,8 @@ public final class Constants {
         double TURN_TOLERANCE_DEGREES = 1.0;
         double PID_TOLERANCE = 0.5;
         double RAMP_SECONDS = 0.75;
+
+        double ENCODER_GEARBOX_SCALE = 8.56;
     }
 
     public interface Intake {

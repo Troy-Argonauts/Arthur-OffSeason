@@ -10,7 +10,7 @@ public class PID extends SequentialCommandGroup {
 	public PID() {
         addCommands(
                 new DT_ResetSensors(),
-                new DT_PID(84)
+                new DT_PID(48) // only works between 0 and 5 feet
         );
 	}
 }
