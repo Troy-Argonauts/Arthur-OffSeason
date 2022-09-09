@@ -20,14 +20,14 @@ public final class Constants {
         double kP = 0.0078;
         double kI = 0.032;
         double kD = 0.0036;
-        double kP_TURN = 0.1;
-        double kI_TURN = 0;
-        double kD_TURN = 0;
-        double TURN_TOLERANCE_DEGREES = 1.0;
-        double PID_TOLERANCE = 0.5;
+        double kP_TURN = 0.0045;
+        double kI_TURN = 0.00025;
+        double kD_TURN = 0.00075;
         double RAMP_SECONDS = 0.75;
 
         double ENCODER_GEARBOX_SCALE = 8.56;
+
+        int pigeon_ID = 11;
     }
 
     public interface Intake {

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
@@ -18,6 +19,8 @@ public class DriveTrain extends SubsystemBase {
 
     private final LazyTalonFX frontLeft, frontRight, rearLeft, rearRight;
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
+
+    private Pigeon2 pigeon;
 
     /**
      * Sets the values of the frontLeft and frontRight motors, and creates local rear motors.
@@ -38,6 +41,8 @@ public class DriveTrain extends SubsystemBase {
         rearRight.setInverted(InvertType.FollowMaster);
 
         gyro.calibrate();
+
+        pigeon = new Pigeon2(Constants.DriveTrain.pigeon_ID);
     }
 
     /**
@@ -66,6 +71,7 @@ public class DriveTrain extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Left Encoder", frontLeft.getSelectedSensorPosition() / Constants.DriveTrain.ENCODER_GEARBOX_SCALE);
         SmartDashboard.putNumber("Right Encoder", frontRight.getSelectedSensorPosition() / Constants.DriveTrain.ENCODER_GEARBOX_SCALE);
+        SmartDashboard.putNumber("Angle", getAngle());
     }
 
     public void zeroEncoders() {
@@ -76,11 +82,11 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getAngle() {
-        return (gyro.getAngle() % 360);
+        return pigeon.getYaw(); // positive means turning left
     }
 
     public void resetGyro() {
-        gyro.reset();
+        pigeon.setYaw(0);
     }
 
     private void motorBreakMode(boolean enabled) {
@@ -187,24 +193,41 @@ public class DriveTrain extends SubsystemBase {
 //            SmartDashboard.putBoolean("I got here Right", true);
 //        }
 
-        SmartDashboard.putNumber("Left Error", leftError);
-        SmartDashboard.putNumber("Right Error", rightError);
-        SmartDashboard.putNumber("Right Output", rightOutput);
-        SmartDashboard.putNumber("Left Output", leftOutput);
+//        SmartDashboard.putNumber("Left Error", leftError);
+//        SmartDashboard.putNumber("Right Error", rightError);
+//        SmartDashboard.putNumber("Right Output", rightOutput);
+//        SmartDashboard.putNumber("Left Output", leftOutput);
 
         frontRight.set(ControlMode.PercentOutput, rightOutput);
         frontLeft.set(ControlMode.PercentOutput, leftOutput);
     }
 
-//    public void turnPID(double angle) {
-//        double prevError = 0;
-//        double period = 0.01;
-//        double output = 0;
-//        double totalError = 0;
-//
-//        double turnError = (angle - (getAngle());
-//        totalrightError += rightError * period;
-//        rightOutput = (Constants.DriveTrain.kP * rightError + Constants.DriveTrain.kI * totalrightError + Constants.DriveTrain.kD * (rightError - prevrightError)) * period;
-//        prevrightError = turnError;
-//    }
+    public void turnPID(double angle) {
+        double prevError = 0;
+        double period = 1;
+        double output = 0;
+        double totalError = 0;
+
+        SmartDashboard.putBoolean("turn cutback", false);
+
+        double turnError = angle - getAngle();
+        totalError += turnError * period;
+        output = (Constants.DriveTrain.kP_TURN * turnError + Constants.DriveTrain.kI_TURN * totalError + Constants.DriveTrain.kD_TURN * (turnError - prevError)) * period;
+        prevError = turnError;
+
+        if (Math.abs(turnError) > 5 && output < 0.07) {
+            if (turnError > 0) {
+                output += 0.03;
+            } else {
+                output -= 0.03;
+            }
+            SmartDashboard.putBoolean("turn cutback", true);
+        }
+
+        SmartDashboard.putNumber("Turn Error", turnError);
+        SmartDashboard.putNumber("Output", output);
+
+        frontRight.set(ControlMode.PercentOutput, output);
+        frontLeft.set(ControlMode.PercentOutput, -output);
+    }
 }

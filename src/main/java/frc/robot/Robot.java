@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.libs.util.log;
+import frc.robot.auton.commands.DT_TurnPID;
 import frc.robot.auton.routines.*;
 import frc.robot.commands.EmergencyStop;
 import frc.robot.subsystems.*;
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
         pneumaticsSystem = new PneumaticsSystem();
         indexer = new Indexer();
         limelight = Limelight.getInstance();
+        driveTrain.resetGyro();
 
         CameraServer.startAutomaticCapture();
         limelight.setLedMode(Limelight.LightMode.OFF);
@@ -76,7 +78,8 @@ public class Robot extends TimedRobot {
         chooser.addOption("One Ball", new OneBall().withTimeout(15));
         //chooser.addOption("Two Ball", new TwoBall().withTimeout(15));
         chooser.addOption("Do Nothing", new WaitCommand(15));
-        chooser.setDefaultOption("PID", new PID());
+        chooser.addOption("PID", new PID());
+        chooser.setDefaultOption("Turn PID", new TurnPID());
     }
 
     @Override
