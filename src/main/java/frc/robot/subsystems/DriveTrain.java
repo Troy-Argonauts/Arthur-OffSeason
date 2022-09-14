@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,6 +22,20 @@ public class DriveTrain extends SubsystemBase {
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 
     private Pigeon2 pigeon;
+
+    //Drive PID Global Variables
+    double drivePrevRightError = 0;
+    double drivePrevLeftError = 0;
+    double drivePeriod = 0.01;
+    double driveRightOutput, driveLeftOutput = 0;
+    double driveTotalRightError = 0;
+    double driveTotalLeftError = 0;
+
+    //Turn PID Global Variables
+    double turnPrevError = 0;
+    double turnPeriod = 0.5;
+    double turnOutput = 0;
+    double turnTotalError = 0;
 
     /**
      * Sets the values of the frontLeft and frontRight motors, and creates local rear motors.
@@ -166,68 +181,70 @@ public class DriveTrain extends SubsystemBase {
     public void distancePID(double inches) {
         SmartDashboard.putBoolean("I got here Left", false);
         SmartDashboard.putBoolean("I got here Right", false);
-        double prevrightError = 0;
-        double prevleftError = 0;
-        double period = 0.01;
-        double rightOutput, leftOutput = 0;
-        double totalrightError = 0;
-        double totalleftError = 0;
 
         double rightError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (rightEncoder() / Constants.DriveTrain.ENCODER_GEARBOX_SCALE);
-        totalrightError += rightError * period;
-        rightOutput = (Constants.DriveTrain.kP * rightError + Constants.DriveTrain.kI * totalrightError + Constants.DriveTrain.kD * (rightError - prevrightError)) * period;
-        prevrightError = rightError;
+        driveTotalRightError += rightError * drivePeriod;
+        driveRightOutput = (Constants.DriveTrain.kP * rightError + Constants.DriveTrain.kI * driveTotalRightError + Constants.DriveTrain.kD * (rightError - drivePrevRightError)) * drivePeriod;
+        drivePrevRightError = rightError;
 
         double leftError = (inches * Constants.DriveTrain.DISTANCE_CONVERSION) - (leftEncoder() / Constants.DriveTrain.ENCODER_GEARBOX_SCALE);
-        totalleftError += leftError * period;
-        leftOutput = (Constants.DriveTrain.kP * leftError + Constants.DriveTrain.kI * totalleftError + Constants.DriveTrain.kD * (leftError - prevleftError)) * period;
-        prevleftError = leftError;
+        driveTotalLeftError += leftError * drivePeriod;
+        driveLeftOutput = (Constants.DriveTrain.kP * leftError + Constants.DriveTrain.kI * driveTotalLeftError + Constants.DriveTrain.kD * (leftError - drivePrevLeftError)) * drivePeriod;
+        drivePrevLeftError = leftError;
 
-//        if (leftError > 250 && leftOutput < 0.06) {
-//            leftOutput += 0.01;
+//        if (leftError > 250 && driveLeftOutput < 0.06) {
+//            driveLeftOutput += 0.01;
 //            SmartDashboard.putBoolean("I got here Left", true);
 //        }
 //
-//        if (rightError > 250 && rightOutput < 0.06) {
-//            rightOutput += 0.01;
+//        if (rightError > 250 && driveRightOutput < 0.06) {
+//            driveRightOutput += 0.01;
 //            SmartDashboard.putBoolean("I got here Right", true);
 //        }
 
-//        SmartDashboard.putNumber("Left Error", leftError);
-//        SmartDashboard.putNumber("Right Error", rightError);
-//        SmartDashboard.putNumber("Right Output", rightOutput);
-//        SmartDashboard.putNumber("Left Output", leftOutput);
+        SmartDashboard.putNumber("Left Error", leftError);
+        SmartDashboard.putNumber("Right Error", rightError);
+        SmartDashboard.putNumber("Right Output", driveRightOutput);
+        SmartDashboard.putNumber("Left Output", driveLeftOutput);
 
-        frontRight.set(ControlMode.PercentOutput, rightOutput);
-        frontLeft.set(ControlMode.PercentOutput, leftOutput);
+        frontRight.set(ControlMode.PercentOutput, driveRightOutput);
+        frontLeft.set(ControlMode.PercentOutput, driveLeftOutput);
     }
 
     public void turnPID(double angle) {
-        double prevError = 0;
-        double period = 1;
-        double output = 0;
-        double totalError = 0;
-
         SmartDashboard.putBoolean("turn cutback", false);
 
         double turnError = angle - getAngle();
-        totalError += turnError * period;
-        output = (Constants.DriveTrain.kP_TURN * turnError + Constants.DriveTrain.kI_TURN * totalError + Constants.DriveTrain.kD_TURN * (turnError - prevError)) * period;
-        prevError = turnError;
+        turnTotalError += turnError * turnPeriod;
+        turnOutput = (Constants.DriveTrain.kP_TURN * turnError + Constants.DriveTrain.kI_TURN * turnTotalError + Constants.DriveTrain.kD_TURN * (turnError - turnPrevError)) * turnPeriod;
+        turnPrevError = turnError;
 
-        if (Math.abs(turnError) > 5 && output < 0.07) {
-            if (turnError > 0) {
-                output += 0.03;
-            } else {
-                output -= 0.03;
-            }
-            SmartDashboard.putBoolean("turn cutback", true);
-        }
+//        if (Math.abs(turnError) > 5 && turnOutput < 0.07) {
+//            if (turnError > 0) {
+//                turnOutput += 0.03;
+//            } else {
+//                turnOutput -= 0.03;
+//            }
+        SmartDashboard.putBoolean("turn cutback", true);
+        //SmartDashboard.putNumber("Turn Error", turnError);
+        //SmartDashboard.putNumber("Output", turnOutput);
 
-        SmartDashboard.putNumber("Turn Error", turnError);
-        SmartDashboard.putNumber("Output", output);
+        frontRight.set(ControlMode.PercentOutput, turnOutput);
+        frontLeft.set(ControlMode.PercentOutput, -turnOutput);
 
-        frontRight.set(ControlMode.PercentOutput, output);
-        frontLeft.set(ControlMode.PercentOutput, -output);
+    }
+
+    public void resetPID() {
+        drivePrevRightError = 0;
+        drivePrevLeftError = 0;
+        drivePeriod = 0.01;
+        driveRightOutput = 0;
+        driveLeftOutput = 0;
+        driveTotalRightError = 0;
+        driveTotalLeftError = 0;
+        turnPrevError = 0;
+        turnPeriod = 1;
+        turnOutput = 0;
+        turnTotalError = 0;
     }
 }

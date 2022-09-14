@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
         //chooser.addOption("Two Ball", new TwoBall().withTimeout(15));
         chooser.addOption("Do Nothing", new WaitCommand(15));
         chooser.addOption("PID", new PID());
-        chooser.setDefaultOption("Turn PID", new TurnPID());
+        chooser.setDefaultOption("Turn PID", new DT_TurnPID(90));
     }
 
     @Override
