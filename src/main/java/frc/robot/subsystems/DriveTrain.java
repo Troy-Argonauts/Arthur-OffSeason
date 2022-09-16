@@ -33,7 +33,7 @@ public class DriveTrain extends SubsystemBase {
 
     //Turn PID Global Variables
     double turnPrevError = 0;
-    double turnPeriod = 0.5;
+    double turnPeriod = 1;
     double turnOutput = 0;
     double turnTotalError = 0;
 
@@ -202,17 +202,17 @@ public class DriveTrain extends SubsystemBase {
 //            SmartDashboard.putBoolean("I got here Right", true);
 //        }
 
-        SmartDashboard.putNumber("Left Error", leftError);
-        SmartDashboard.putNumber("Right Error", rightError);
-        SmartDashboard.putNumber("Right Output", driveRightOutput);
-        SmartDashboard.putNumber("Left Output", driveLeftOutput);
+//        SmartDashboard.putNumber("Left Error", leftError);
+//        SmartDashboard.putNumber("Right Error", rightError);
+//        SmartDashboard.putNumber("Right Output", driveRightOutput);
+//        SmartDashboard.putNumber("Left Output", driveLeftOutput);
 
         frontRight.set(ControlMode.PercentOutput, driveRightOutput);
         frontLeft.set(ControlMode.PercentOutput, driveLeftOutput);
     }
 
     public void turnPID(double angle) {
-        SmartDashboard.putBoolean("turn cutback", false);
+//        SmartDashboard.putBoolean("turn cutback", false);
 
         double turnError = angle - getAngle();
         turnTotalError += turnError * turnPeriod;
@@ -221,13 +221,14 @@ public class DriveTrain extends SubsystemBase {
 
 //        if (Math.abs(turnError) > 5 && turnOutput < 0.07) {
 //            if (turnError > 0) {
-//                turnOutput += 0.03;
+//                turnOutput += 0.05;
 //            } else {
-//                turnOutput -= 0.03;
+//                turnOutput -= 0.05;
 //            }
-        SmartDashboard.putBoolean("turn cutback", true);
-        //SmartDashboard.putNumber("Turn Error", turnError);
-        //SmartDashboard.putNumber("Output", turnOutput);
+//            SmartDashboard.putBoolean("turn cutback", true);
+//        }
+        SmartDashboard.putNumber("Turn Error", turnError);
+        SmartDashboard.putNumber("Output", turnOutput);
 
         frontRight.set(ControlMode.PercentOutput, turnOutput);
         frontLeft.set(ControlMode.PercentOutput, -turnOutput);

@@ -20,8 +20,8 @@ public final class Constants {
         double kP = 0.0055;
         double kI = 0.0005;
         double kD = 0;
-        double kP_TURN = 0.007;
-        double kI_TURN = 0.00008;
+        double kP_TURN = 0.006;
+        double kI_TURN = 0.00002;
         double kD_TURN = 0;
         double RAMP_SECONDS = 0.75;
 

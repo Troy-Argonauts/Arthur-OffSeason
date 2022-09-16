@@ -67,6 +67,8 @@ public class Robot extends TimedRobot {
 
         robotContainer = new RobotContainer();
 
+        driveTrain.resetGyro();
+
 //        try {
 //            log.logCreation("yvalues");
 //        } catch (IOException e) {
@@ -74,12 +76,13 @@ public class Robot extends TimedRobot {
 //        }
 
         driveTrain.zeroEncoders();
+
         SmartDashboard.putData("Autonomous modes", chooser);
         chooser.addOption("One Ball", new OneBall().withTimeout(15));
         //chooser.addOption("Two Ball", new TwoBall().withTimeout(15));
         chooser.addOption("Do Nothing", new WaitCommand(15));
         chooser.addOption("PID", new PID());
-        chooser.setDefaultOption("Turn PID", new DT_TurnPID(90));
+        chooser.setDefaultOption("Turn PID", new TurnPID());
     }
 
     @Override
@@ -97,7 +100,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        driveTrain.resetGyro();
+        driveTrain.resetPID();
         autonomousCommand = chooser.getSelected();
     
         if (autonomousCommand != null) {
