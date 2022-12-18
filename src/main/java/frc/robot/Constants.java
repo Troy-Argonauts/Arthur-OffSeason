@@ -25,7 +25,7 @@ public final class Constants {
         double kD_TURN = 0;
         double TURN_TOLERANCE_DEGREES = 1.0;
         double PID_TOLERANCE = 0.5;
-        double RAMP_SECONDS = 0.75;
+        double RAMP_SECONDS = 0;
     }
 
     public interface Intake {

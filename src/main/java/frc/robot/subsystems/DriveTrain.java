@@ -15,6 +15,8 @@ import frc.robot.Constants;
 public class DriveTrain extends SubsystemBase {
 
     private final LazyTalonFX frontLeft, frontRight, rearLeft, rearRight;
+
+    PIDController speedController, turnController;
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 
     /**
@@ -26,6 +28,9 @@ public class DriveTrain extends SubsystemBase {
         frontRight = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.FRONT_RIGHT, Constants.DriveTrain.RAMP_SECONDS);
         rearLeft = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.REAR_LEFT, Constants.DriveTrain.RAMP_SECONDS);
         rearRight = ArgoMotor.generateConfigTalonFX(Constants.DriveTrain.REAR_RIGHT, Constants.DriveTrain.RAMP_SECONDS);
+
+        speedController = new PIDController(0, 0, 0);
+        turnController = new PIDController(0,0,0);
 
         rearLeft.follow(frontLeft);
         rearRight.follow(frontRight);
@@ -49,8 +54,8 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void cheesyDriveTeleop(double turn, double speed, double nerf) {
-        frontLeft.set(ControlMode.PercentOutput, (speed - turn * 0.8) * nerf);
-        frontRight.set(ControlMode.PercentOutput, (speed + turn * 0.8) * nerf);
+        frontLeft.set(ControlMode.PercentOutput, (speedController.PID(speed) - turnController.PID(turn)) * nerf);
+        frontRight.set(ControlMode.PercentOutput, (speedController.PID(speed) + turnController.PID(turn)) * nerf);
     }
 
     public double getEncoderPosition(boolean backwards) {
